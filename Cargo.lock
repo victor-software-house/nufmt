@@ -1625,7 +1625,7 @@ dependencies = [
 
 [[package]]
 name = "nufmt"
-version = "0.1.6"
+version = "0.1.7-vsh.2"
 dependencies = [
  "clap",
  "criterion",
