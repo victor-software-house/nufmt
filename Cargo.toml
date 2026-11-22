@@ -1,11 +1,11 @@
 [package]
 name = "nufmt"
-version = "0.1.6"
+version = "0.1.7-vsh.1"
 edition = "2024"
 license = "MIT"
 description = "An AST-based formatter for Nushell scripts, built on Nushell's own parser"
 homepage = "https://github.com/nushell/nufmt"
-repository = "https://github.com/nushell/nufmt"
+repository = "https://github.com/victor-software-house/nufmt"
 readme = "README.md"
 keywords = ["nu", "nushell", "formatting", "cli"]
 categories = ["command-line-utilities"]
