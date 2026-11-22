@@ -1,0 +1,80 @@
+%YAML 1.2
+---
+schema: 2
+downstream:
+  remote: origin
+  branch: downstream
+  recovery_tag_prefix: forkctl/recovery
+  publish: append
+upstream:
+  remote: upstream
+  url: https://github.com/nushell/nufmt.git
+  fetch_ref: refs/heads/main
+base:
+  target:
+    type: commit
+    selector: 13f2f8c3873ae73ba7e95e5e8fd4bdac6c019f5f
+    commit: 13f2f8c3873ae73ba7e95e5e8fd4bdac6c019f5f
+  canonical: 13f2f8c3873ae73ba7e95e5e8fd4bdac6c019f5f
+  stack: 13f2f8c3873ae73ba7e95e5e8fd4bdac6c019f5f
+documents:
+  ledger: PATCHES.md
+  exports: patches/downstream
+bookkeeping_patch: fork-tooling
+patches:
+  - name: stable-declaration-spacing
+    layer: source
+    purpose: >-
+      Space adjacent let and const declarations by their formatted layout instead of
+      their source layout, so a declaration that expands or collapses gets its blank
+      line on the first pass and a second pass changes nothing.
+    upstream_status: not-submitted
+    drop_when: >-
+      Upstream nufmt main spaces let and const groups by the formatted layout, so the
+      first pass is stable for a declaration that expands or collapses.
+    scope:
+      - src/formatting/blocks.rs
+      - src/formatting/mod.rs
+      - tests/ground_truth.rs
+      - tests/fixtures/**
+      - CHANGELOG.md
+  - name: vsh-release
+    layer: tooling
+    purpose: >-
+      Version the fork release as 0.1.7-vsh.2, a build of upstream main at 13f2f8c
+      with the stable-declaration-spacing patch, and point the cargo-dist installers at
+      the fork releases.
+    upstream_status: "inappropriate: downstream-only release metadata"
+    drop_when: >-
+      Upstream nufmt releases a version that contains
+      13f2f8c3873ae73ba7e95e5e8fd4bdac6c019f5f and the stable-declaration-spacing fix.
+    scope:
+      - Cargo.toml
+      - Cargo.lock
+  - name: macos-arm-runner
+    layer: tooling
+    purpose: >-
+      Build aarch64-apple-darwin on the macos-15 runner, because GitHub no longer
+      accepts the macos-14 runner that cargo-dist 0.33.0 picks for it.
+    upstream_status: not-submitted
+    drop_when: >-
+      Upstream dist-workspace.toml or its cargo-dist version builds
+      aarch64-apple-darwin on a runner GitHub accepts.
+    scope:
+      - dist-workspace.toml
+  - name: fork-tooling
+    layer: tooling
+    purpose: Own fork policy, generated evidence, and integration configuration.
+    upstream_status: "inappropriate: downstream-only fork maintenance"
+    drop_when: The downstream fork is retired.
+    scope:
+      - patches/fork.yaml
+      - PATCHES.md
+      - patches/downstream/**
+      - mise.toml
+      - mise*.lock
+disabled_patches: []
+history: []
+contracts:
+  allow_base: []
+  required_text: []
